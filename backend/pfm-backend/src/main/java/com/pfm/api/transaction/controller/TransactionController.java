@@ -13,7 +13,7 @@ import com.pfm.api.transaction.model.TransactionModel;
 import com.pfm.api.transaction.service.ITransactionService;
 
 @RestController
-@RequestMapping(path = "api/transaction")
+@RequestMapping(path = "/api/transaction")
 public class TransactionController {
 	
 	@Autowired
