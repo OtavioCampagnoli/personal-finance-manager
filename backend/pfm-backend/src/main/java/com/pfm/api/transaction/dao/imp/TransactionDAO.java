@@ -107,8 +107,32 @@ public class TransactionDAO implements ITransactionDAO {
 
 	@Override
 	public TransactionModel getById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		TransactionModel objectReturn = new TransactionModel();
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT ");
+		query.append("tra.id, ");
+		query.append("tra.description, ");
+		query.append("tra.amount, ");
+		query.append("tra.date, ");
+		query.append("tra.type, ");
+		query.append("tra.category, ");
+		query.append("tra.created_at, ");
+		query.append("tra.updated_at ");
+		query.append("FROM ").append(this.schemaName).append("transaction AS tra ");
+		query.append("WHERE id = :id");
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", id);
+		
+		List<TransactionModel> list = this.namedJdbc.query(query.toString(), params, new TransactionMapper());
+		
+		if(!list.isEmpty()) {
+			objectReturn = list.get(0);
+		}
+		
+		return objectReturn;
 	}
 
 	@Override

@@ -47,8 +47,7 @@ public class TransactionService implements ITransactionService {
 
 	@Override
 	public TransactionModel getById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.dao.getById(id);
 	}
 
 	@Override
