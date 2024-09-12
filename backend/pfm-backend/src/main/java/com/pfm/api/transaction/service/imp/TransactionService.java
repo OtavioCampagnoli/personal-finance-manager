@@ -22,13 +22,12 @@ public class TransactionService implements ITransactionService {
 
 	@Override
 	public TransactionModel update(TransactionModel model) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.dao.update(model);
 	}
 
 	@Override
 	public TransactionModel saveOrUpdate(TransactionModel model) {
-		
+
 		if (model == null) {
 			throw new IllegalArgumentException("Transaction model cannot be null");
 		}

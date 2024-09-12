@@ -1,10 +1,11 @@
 package com.pfm.api.transaction.dao.imp;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -19,7 +20,10 @@ import com.pfm.api.transaction.model.TransactionModel;
 public class TransactionDAO implements ITransactionDAO {
 
 	@Autowired
-	NamedParameterJdbcTemplate jdbc;
+	NamedParameterJdbcTemplate namedJdbc;
+	
+	@Autowired
+	JdbcTemplate jdbc;
 
 	private final String schemaName = "personal_finance_manager.";
 
@@ -53,12 +57,9 @@ public class TransactionDAO implements ITransactionDAO {
 		params.addValue("type", model.getType().toString());
 		params.addValue("category", model.getCategory().toString());
 
-		System.out.println();
-
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
-		this.jdbc.update(query.toString(), params, keyHolder, new String[] { "id" }); // Certifique-se de que o nome da
-																						// coluna está correto
+		this.namedJdbc.update(query.toString(), params, keyHolder, new String[] { "id" });
 
 		Number generatedId = keyHolder.getKey();
 
@@ -71,8 +72,31 @@ public class TransactionDAO implements ITransactionDAO {
 
 	@Override
 	public TransactionModel update(TransactionModel model) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		StringBuilder query = new StringBuilder();
+
+		query.append("UPDATE ").append(this.schemaName).append("transaction ");
+		query.append("SET ");
+		query.append("description = :description, ");
+		query.append("amount = :amount, ");
+		query.append("date = :date, ");
+		query.append("type = :type, ");
+		query.append("category = :category, ");
+		query.append("updated_at = now() ");
+		query.append("WHERE id = :id ");
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		params.addValue("description", model.getDescription());
+		params.addValue("amount", model.getAmount());
+		params.addValue("date", model.getDate());
+		params.addValue("type", model.getType().toString());
+		params.addValue("category", model.getCategory().toString());
+		params.addValue("id", model.getId());
+
+		this.namedJdbc.update(query.toString(), params);
+
+		return model;
 	}
 
 	@Override
