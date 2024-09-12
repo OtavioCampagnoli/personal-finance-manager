@@ -4,15 +4,15 @@ import java.util.List;
 
 public interface IBaseService<T> {
 
-	T save(T entity);
+	T save(T model);
 
-	T update(T entity);
+	T update(T model);
 	
-	T saveOrUpdate(T entity);
+	T saveOrUpdate(T model);
 
-	boolean delete(Long id);
+	boolean delete(Integer id);
 
-	T getById(Long id);
+	T getById(Integer id);
 
 	List<T> findAll();
 

@@ -9,39 +9,45 @@ import com.pfm.api.transaction.dao.ITransactionDAO;
 import com.pfm.api.transaction.model.TransactionModel;
 import com.pfm.api.transaction.service.ITransactionService;
 
-
 @Service
 public class TransactionService implements ITransactionService {
 
 	@Autowired
 	ITransactionDAO dao;
-	
+
 	@Override
-	public TransactionModel save(TransactionModel entity) {
+	public TransactionModel save(TransactionModel model) {
+		return this.dao.save(model);
+	}
+
+	@Override
+	public TransactionModel update(TransactionModel model) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public TransactionModel update(TransactionModel entity) {
-		// TODO Auto-generated method stub
-		return null;
+	public TransactionModel saveOrUpdate(TransactionModel model) {
+		
+		if (model == null) {
+			throw new IllegalArgumentException("Transaction model cannot be null");
+		}
+
+		if (model.getId() != null && model.getId() > 0) {
+			return this.update(model);
+		}
+
+		return this.save(model);
 	}
 
 	@Override
-	public TransactionModel saveOrUpdate(TransactionModel entity) {
-		// TODO Auto-generated method stub 
-		return null;
-	}
-
-	@Override
-	public boolean delete(Long id) {
+	public boolean delete(Integer id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public TransactionModel getById(Long id) {
+	public TransactionModel getById(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
