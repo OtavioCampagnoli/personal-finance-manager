@@ -10,7 +10,7 @@ public interface IBaseService<T> {
 	
 	T saveOrUpdate(T model);
 
-	boolean delete(Integer id);
+	Boolean deleteById(Integer id);
 
 	T getById(Integer id);
 

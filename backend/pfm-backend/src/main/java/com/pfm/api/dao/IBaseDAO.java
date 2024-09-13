@@ -8,7 +8,7 @@ public interface IBaseDAO<T> {
 
 	T update(T model);
 
-	boolean delete(Integer id);
+	Boolean deleteById(Integer id);
 
 	T getById(Integer id);
 

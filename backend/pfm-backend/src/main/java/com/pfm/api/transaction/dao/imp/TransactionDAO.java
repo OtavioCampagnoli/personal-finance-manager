@@ -1,6 +1,5 @@
 package com.pfm.api.transaction.dao.imp;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -100,9 +99,18 @@ public class TransactionDAO implements ITransactionDAO {
 	}
 
 	@Override
-	public boolean delete(Integer id) {
-		// TODO Auto-generated method stub
-		return false;
+	public Boolean deleteById(Integer id) {
+		
+		StringBuffer query = new StringBuffer();
+		query.append("DELETE FROM ").append(this.schemaName).append("transaction ");
+		query.append("WHERE id = :id ");
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", id);
+		
+		int rowsAffected =  this.namedJdbc.update(query.toString(), params);
+		
+		return rowsAffected > 0;
 	}
 
 	@Override

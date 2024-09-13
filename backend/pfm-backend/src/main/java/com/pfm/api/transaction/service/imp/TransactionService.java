@@ -40,8 +40,16 @@ public class TransactionService implements ITransactionService {
 	}
 
 	@Override
-	public boolean delete(Integer id) {
-		// TODO Auto-generated method stub
+	public Boolean deleteById(Integer id) {
+
+		TransactionModel objectExistent = this.dao.getById(id);
+
+		if (objectExistent != null) {
+			if (objectExistent.getId() != null && objectExistent.getId() > 0) {
+				return this.dao.deleteById(id);
+			}
+		}
+
 		return false;
 	}
 
