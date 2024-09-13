@@ -23,4 +23,5 @@ public class ConnectionFactory {
 	public Connection connection(DataSource dataSource) throws SQLException {
 		return dataSource.getConnection();
 	}
+	
 }
