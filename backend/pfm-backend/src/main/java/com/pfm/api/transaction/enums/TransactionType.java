@@ -8,8 +8,7 @@ import lombok.Getter;
 public enum TransactionType {
 
 	INCOME,
-	
+
 	EXPENSE;
-	
-	
+
 }

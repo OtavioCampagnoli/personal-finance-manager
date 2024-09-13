@@ -7,7 +7,11 @@ public interface IBaseService<T> {
 	T save(T model);
 
 	T update(T model);
-	
+
+	T paginatedSearch(T model);
+
+	List<T> search(T model);
+
 	T saveOrUpdate(T model);
 
 	Boolean deleteById(Integer id);

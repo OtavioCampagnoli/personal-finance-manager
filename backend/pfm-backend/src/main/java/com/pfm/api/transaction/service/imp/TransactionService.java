@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pfm.api.transaction.dao.ITransactionDAO;
+import com.pfm.api.transaction.dto.TransactionSearchDTO;
 import com.pfm.api.transaction.model.TransactionModel;
 import com.pfm.api.transaction.service.ITransactionService;
 
@@ -49,7 +50,6 @@ public class TransactionService implements ITransactionService {
 				return this.dao.deleteById(id);
 			}
 		}
-
 		return false;
 	}
 
@@ -61,6 +61,23 @@ public class TransactionService implements ITransactionService {
 	@Override
 	public List<TransactionModel> findAll() {
 		return this.dao.findAll();
+	}
+
+	@Override
+	public TransactionModel paginatedSearch(TransactionModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TransactionModel> search(TransactionModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TransactionModel> search(TransactionSearchDTO dto) {
+		return this.dao.search(dto);
 	}
 
 }

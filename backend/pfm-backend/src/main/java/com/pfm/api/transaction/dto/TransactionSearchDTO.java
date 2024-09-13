@@ -1,7 +1,6 @@
-package com.pfm.api.transaction.model;
+package com.pfm.api.transaction.dto;
 
 import java.math.BigDecimal;
-
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -10,19 +9,15 @@ import com.pfm.api.transaction.enums.TransactionCategory;
 import com.pfm.api.transaction.enums.TransactionType;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
-public class TransactionModel {
-
-	private Integer id;
+@AllArgsConstructor
+public class TransactionSearchDTO {
 
 	private String description;
 
@@ -30,6 +25,9 @@ public class TransactionModel {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date date;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date dateEnd;
 
 	private TransactionType type;
 
@@ -39,6 +37,12 @@ public class TransactionModel {
 	private LocalDateTime createdAt;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+	private LocalDateTime createdAtEnd;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
 	private LocalDateTime updatedAt;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+	private LocalDateTime updatedAtEnd;
 
 }

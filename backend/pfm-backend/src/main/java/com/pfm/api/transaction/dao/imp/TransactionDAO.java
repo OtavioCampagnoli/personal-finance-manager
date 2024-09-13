@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.pfm.api.transaction.dao.ITransactionDAO;
+import com.pfm.api.transaction.dto.TransactionSearchDTO;
 import com.pfm.api.transaction.mapper.TransactionMapper;
 import com.pfm.api.transaction.model.TransactionModel;
 
@@ -20,9 +21,12 @@ public class TransactionDAO implements ITransactionDAO {
 
 	@Autowired
 	NamedParameterJdbcTemplate namedJdbc;
-	
+
 	@Autowired
 	JdbcTemplate jdbc;
+
+//	@Autowired
+//	DAOUtil daoUtil;
 
 	private final String schemaName = "personal_finance_manager.";
 
@@ -71,7 +75,7 @@ public class TransactionDAO implements ITransactionDAO {
 
 	@Override
 	public TransactionModel update(TransactionModel model) {
-		
+
 		StringBuilder query = new StringBuilder();
 
 		query.append("UPDATE ").append(this.schemaName).append("transaction ");
@@ -100,24 +104,24 @@ public class TransactionDAO implements ITransactionDAO {
 
 	@Override
 	public Boolean deleteById(Integer id) {
-		
+
 		StringBuffer query = new StringBuffer();
 		query.append("DELETE FROM ").append(this.schemaName).append("transaction ");
 		query.append("WHERE id = :id ");
-		
+
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("id", id);
-		
-		int rowsAffected =  this.namedJdbc.update(query.toString(), params);
-		
+
+		int rowsAffected = this.namedJdbc.update(query.toString(), params);
+
 		return rowsAffected > 0;
 	}
 
 	@Override
 	public TransactionModel getById(Integer id) {
-		
+
 		TransactionModel objectReturn = new TransactionModel();
-		
+
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT ");
 		query.append("tra.id, ");
@@ -130,16 +134,16 @@ public class TransactionDAO implements ITransactionDAO {
 		query.append("tra.updated_at ");
 		query.append("FROM ").append(this.schemaName).append("transaction AS tra ");
 		query.append("WHERE id = :id");
-		
+
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("id", id);
-		
+
 		List<TransactionModel> list = this.namedJdbc.query(query.toString(), params, new TransactionMapper());
-		
-		if(!list.isEmpty()) {
+
+		if (!list.isEmpty()) {
 			objectReturn = list.get(0);
 		}
-		
+
 		return objectReturn;
 	}
 
@@ -157,7 +161,8 @@ public class TransactionDAO implements ITransactionDAO {
 		query.append(" tra.category, ");
 		query.append(" tra.created_at, ");
 		query.append(" tra.updated_at ");
-		query.append(" FROM " + this.schemaName + "transaction AS tra ");
+		query.append(" FROM ").append(this.schemaName).append("transaction AS tra ");
+		query.append(" ORDER BY tra.updated_at DESC ");
 
 		List<TransactionModel> list = this.jdbc.query(query.toString(), new TransactionMapper());
 
@@ -167,4 +172,94 @@ public class TransactionDAO implements ITransactionDAO {
 
 		return listReturn;
 	}
+
+	@Override
+	public TransactionModel paginatedSearch(TransactionModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TransactionModel> search(TransactionSearchDTO dto) {
+
+		List<TransactionModel> listReturn = new LinkedList<TransactionModel>();
+
+		StringBuilder query = new StringBuilder();
+
+		query.append("SELECT ");
+		query.append("tra.id, ");
+		query.append("tra.description, ");
+		query.append("tra.amount, ");
+		query.append("tra.date, ");
+		query.append("tra.type, ");
+		query.append("tra.category, ");
+		query.append("tra.created_at, ");
+		query.append("tra.updated_at ");
+		query.append(" FROM ").append(this.schemaName).append("transaction AS tra ");
+		query.append("WHERE tra.id > 0 ");
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+
+		if (dto.getDescription() != null) {
+			query.append("AND tra.description LIKE :description ");
+			params.addValue("description", "%" + dto.getDescription() + "%");
+		}
+
+		if (dto.getAmount() != null) {
+			query.append("AND tra.amount = :amount ");
+			params.addValue("amount", dto.getAmount());
+		}
+
+		if (dto.getDate() != null && dto.getDateEnd() != null) {
+			query.append("AND tra.date BETWEEN :date AND :dateEnd ");
+			params.addValue("date", dto.getDate());
+			params.addValue("dateEnd", dto.getDateEnd());
+		} else if (dto.getDate() != null) {
+			query.append("AND tra.date >= :date ");
+			params.addValue("date", dto.getDate());
+		}
+
+		if (dto.getType() != null) {
+			query.append("AND tra.type = :type ");
+			params.addValue("type", dto.getType().toString());
+		}
+
+		if (dto.getCategory() != null) {
+			query.append("AND tra.category = :category ");
+			params.addValue("category", dto.getCategory().toString());
+		}
+
+		if (dto.getCreatedAt() != null && dto.getCreatedAtEnd() != null) {
+			query.append("AND tra.created_at BETWEEN :createdAt AND :createdAtEnd ");
+			params.addValue("createdAt", dto.getCreatedAt());
+			params.addValue("createdAtEnd", dto.getCreatedAtEnd());
+		} else if (dto.getCreatedAt() != null) {
+			query.append("AND tra.created_at BETWEEN :createdAt AND now() ");
+			params.addValue("createdAt", dto.getCreatedAt());
+		}
+
+		if (dto.getUpdatedAt() != null && dto.getUpdatedAtEnd() != null) {
+			query.append("AND tra.updated_at BETWEEN :updatedAt AND :updatedAtEnd ");
+			params.addValue("updatedAt", dto.getUpdatedAt());
+			params.addValue("updatedAtEnd", dto.getUpdatedAtEnd());
+		} else if (dto.getUpdatedAt() != null) {
+			query.append("AND tra.updated_at BETWEEN :updatedAt AND now() ");
+			params.addValue("updatedAt", dto.getUpdatedAt());
+		}
+
+		List<TransactionModel> list = this.namedJdbc.query(query.toString(), params, new TransactionMapper());
+
+		if (!list.isEmpty()) {
+			listReturn.addAll(list);
+		}
+
+		return listReturn;
+	}
+
+	@Override
+	public List<TransactionModel> search(TransactionModel model) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
