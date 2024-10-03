@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +19,11 @@ import com.pfm.api.transaction.dto.TransactionSearchDTO;
 import com.pfm.api.transaction.model.TransactionModel;
 import com.pfm.api.transaction.service.ITransactionService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/api/transaction")
+@CrossOrigin(origins = "*")
 public class TransactionController {
 
 	@Autowired
@@ -43,13 +48,15 @@ public class TransactionController {
     }
 
 	@PostMapping
-	public ResponseEntity<TransactionModel> save(@RequestBody TransactionModel model) {
+	@Transactional
+	public ResponseEntity<TransactionModel> save(@RequestBody @Valid TransactionModel model) {
 		TransactionModel response = this.service.saveOrUpdate(model);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<Boolean> delete(@PathVariable Integer id) {
     	Boolean response = this.service.deleteById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);

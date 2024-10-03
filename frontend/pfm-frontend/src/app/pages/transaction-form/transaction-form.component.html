@@ -1,0 +1,22 @@
+<p-table #dt [columns]="cols" [value]="listTransactions" dataKey="id" [style]="{'margin-bottom':'20px'}"
+  [responsive]="true" selectionMode="single" [(selection)]="modelRegister" (onRowSelect)="edit($event)"
+  (onRowUnselect)="resetformRegister()" [rows]="10" [showCurrentPageReport]="false" [paginator]="true"
+  [scrollable]="true" [resizableColumns]="true">
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of cols">
+        {{col.header}}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr [pSelectableRow]="rowData">
+      <td> {{rowData.description}}</td>
+      <td> {{rowData.amount}}</td>
+      <td> {{ translateCategory(rowData.category) }}</td>
+      <td> {{ transalateType(rowData.type) }} </td>
+      <td> {{rowData.date | date: 'dd/MM/yyyy' }} </td>
+      <td> {{rowData.createdAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+    </tr>
+  </ng-template>
+</p-table>

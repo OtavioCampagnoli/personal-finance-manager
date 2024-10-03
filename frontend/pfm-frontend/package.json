@@ -18,6 +18,8 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "install": "^0.13.0",
+    "npm": "^10.8.3",
     "primeicons": "^6.0.1",
     "primeng": "^14.2.3",
     "rxjs": "~7.5.0",

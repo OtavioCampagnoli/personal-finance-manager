@@ -3,14 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { TransactionFormComponent } from './pages/transaction-form/transaction-form.component';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TransactionFormComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    TableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
